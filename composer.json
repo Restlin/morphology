@@ -1,0 +1,17 @@
+{
+    "name": "restlin/morphology",
+    "description": "russian morphology helper",
+    "type": "library",
+    "require": {
+        "php": ">=7",
+        "ext-mbstring": "^7.4"
+    },
+    "license": "mit",
+    "authors": [
+        {
+            "name": "Ilia Shumilov",
+            "email": "restlinru@yandex.ru"
+        }
+    ],
+    "minimum-stability": "dev"
+}
