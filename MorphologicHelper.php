@@ -9,7 +9,7 @@ use Exception;
  * @todo добавить проверки на несуществующий падеж во все функции
  * @author Ilia Shumilov <restlinru@yandex.ru>
  */
-class MorphologicHelper
+final class MorphologicHelper
 {
 
     /**
@@ -97,7 +97,7 @@ class MorphologicHelper
      * Получить окончания имен
      * @return Array
      */
-    protected static function nameEnds() : Array
+    private static function nameEnds() : Array
     {
         return [
             self::GENETIVE => ['и', 'и', 'ы', 'я', 'а', 'и'],
@@ -112,7 +112,7 @@ class MorphologicHelper
      * Получить массив нестандартных имен
      * @return Array
      */
-    protected static function uniqueNames() : Array
+    private static function uniqueNames() : Array
     {
         return [
             'павел' => 'павл',
@@ -174,7 +174,7 @@ class MorphologicHelper
      * Получить окончания фамилий
      * @return Array
      */
-    protected static function surnameEnds() : array
+    private static function surnameEnds() : array
     {
         return [
             self::GENETIVE => ['и', 'ы', '$1я', 'ы', 'ого', 'ца', 'я', 'а', 'ой', 'ы', 'ой', 'и'],
@@ -191,7 +191,7 @@ class MorphologicHelper
      * @param Array $ends окончания для соответствующего падежа
      * @return string
      */
-    protected static function surnameMaleCase(string $surname, array $ends) : string
+    private static function surnameMaleCase(string $surname, array $ends) : string
     {
         if (preg_match('/[кгх]а$/ui', $surname)) {
             $surname = preg_replace("/.$/ui", $ends[0], $surname); //0
@@ -228,7 +228,7 @@ class MorphologicHelper
      * @param Array $ends окончания для соответствующего падежа
      * @return string
      */
-    protected static function surnameFemaleCase(string $surname, Array $ends) : string
+    private static function surnameFemaleCase(string $surname, Array $ends) : string
     {
         if (preg_match('/[бвгдежзийлкмнпорстуфхцчьшщ]$/ui', $surname)) {
             $surname = $surname;
@@ -268,7 +268,7 @@ class MorphologicHelper
      * получить массив окончаний должностей
      * @return array
      */
-    protected static function profEnds() : array
+    private static function profEnds() : array
     {
         return [
             self::GENETIVE => ['ого', 'его', 'а', 'я', 'ого'],
@@ -315,7 +315,7 @@ class MorphologicHelper
      * получить массив окончаний слов
      * @return array
      */
-    protected static function wordEnds() : array
+    private static function wordEnds() : array
     {
         return [
             self::GENETIVE => ['ого', 'его', 'а', 'я', 'ой', 'и', 'я', 'ка', 'а', 'ы', 'ей', 'и'],
@@ -369,14 +369,14 @@ class MorphologicHelper
             return $word;
         }
     }
-    protected static function getPathForTmpFile(): string {
+    private static function getPathForTmpFile(): string {
         return sys_get_temp_dir().DIRECTORY_SEPARATOR.'restlin-words.php';
     }
 
     /**
      * Загрузить словарь в $words
      */
-    protected static function loadWords()
+    private static function loadWords()
     {
         if (self::$words) {
             return true;
@@ -447,7 +447,7 @@ class MorphologicHelper
      * @param string $word слово
      * @return bool
      */
-    protected static function isWordMainCase(string $word): bool
+    private static function isWordMainCase(string $word): bool
     {
         $base = str_replace('ё', 'е', mb_strtolower($word, 'utf-8'));
         return !self::$words || key_exists($base, self::$words);

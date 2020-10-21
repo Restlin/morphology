@@ -13,5 +13,5 @@
             "email": "restlinru@yandex.ru"
         }
     ],
-    "minimum-stability": "dev"
+    "minimum-stability": "stable"
 }
