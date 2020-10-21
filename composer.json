@@ -13,5 +13,10 @@
             "email": "restlinru@yandex.ru"
         }
     ],
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "restlin\\morphology\\": ""
+        }
+    }
 }
