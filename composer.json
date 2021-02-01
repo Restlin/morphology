@@ -4,7 +4,7 @@
     "type": "library",
     "require": {
         "php": ">=7",
-        "ext-mbstring": "^7.4"
+        "ext-mbstring": ">=7.4"
     },
     "license": "mit",
     "authors": [
