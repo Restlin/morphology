@@ -472,4 +472,70 @@ final class MorphologicHelper
         }, $collocation);
     }
 
+    /**
+     * получить массив окончаний слов для множественного числа
+     * @return array
+     */
+    private static function wordManyEnds() : array
+    {
+        return [
+            self::NOMINATIVE => [0 => 'ие', 1 => 'ие', 2 => 'ы', 3 => 'и', 4 => 'ые', 5 => 'и', 6 => 'я', 7 => 'и', 8 => 'а', 9 => 'ы', 10 => 'ие', 11 => 'и', 12 => 'и'],
+            self::GENETIVE => [0 => 'их', 1 => 'их', 2 => 'ов', 3 => 'ей', 4 => 'ых', 5 => '', 6 => 'й', 7 => 'ков', 8 => 'ов', 9 => '', 10 => 'их', 11 => 'й', 12 => 'ов'],
+            self::DATIVE => [0 => 'им', 1 => 'им', 2 => 'ам', 3 => 'ям', 4 => 'ым', 5 => 'ам', 6 => 'ям', 7 => 'кам', 8 => 'ам', 9 => 'ам', 10 => 'им', 11 => 'ям', 12 => 'ам'],
+            self::ACCUSATIVE => [0 => 'их', 1 => 'их', 2 => 'ов', 3 => 'ей', 4 => 'ых', 5 => 'и', 6 => 'я', 7 => 'ки', 8 => 'ов', 9 => 'ы', 10 => 'их', 11 => 'и', 12 => 'ов'],
+            self::INSTRUMENTAL => [0 => 'ими', 1 => 'ими', 2 => 'ами', 3 => 'ями', 4 => 'ыми', 5 => 'ами', 6 => 'ями', 7 => 'ками', 8 => 'ами', 9 => 'ами', 10 => 'ими', 11 => 'ями', 12 => 'ами'],
+            self::PREPOSITIONAL => [0 => 'их', 1 => 'их', 2 => 'ах', 3 =>  'ях', 4 =>  'ыми', 5 => 'ах', 6 => 'ях', 7 => 'ках', 8 => 'ах', 9 => 'ах', 10 => 'их', 11 => 'ях', 12 => 'ах'],
+        ];
+    }
+
+    /**
+     * Возвращает слово во множественном числе указанном падеже
+     * @param string $word слово
+     * @param string $case падеж
+     * @return string
+     */
+    public static function wordManyCase(string $word, string $case): string
+    {
+        $ends = self::wordManyEnds();
+        if (in_array(mb_strtolower($word, 'UTF-8'), ['по', 'о', 'об', 'над', 'пальто', 'метро', 'кофе', 'бюро', 'на', 'постоянно', 'регулярно', 'вечно'])) {
+            return $word;
+        } elseif (preg_match('/ский|ое$/ui', $word)) { //скандинавский
+            return preg_replace('/..$/ui', $ends[$case][0], $word);
+        } elseif (preg_match('/[чшщ]ий$/ui', $word)) { //ведущий
+            return preg_replace('/..$/ui', $ends[$case][1], $word);
+        } elseif (preg_match('/ый$/ui', $word)) { //быстрый
+            return preg_replace('/..$/ui', $ends[$case][0], $word); //проверить в рабочем варианте
+        } elseif (preg_match('/([аиеёот]р|ист|[ае]нт|ог|юрисконсульт|ч|вед|аз|ен)$/ui', $word)) { //документовед
+            return $word . $ends[$case][2];
+        } elseif (preg_match('/(ик)$/ui', $word)) { //котик
+            return $word . $ends[$case][12];
+        } elseif (preg_match('/(ел|ар)ь$/ui', $word)) { //слесарь
+            return preg_replace('/.$/ui', $ends[$case][3], $word);
+        } elseif (preg_match('/[жчщш][ая]я$/ui', $word)) { //ведущая
+            return preg_replace('/..$/ui', $ends[$case][10], $word);
+        } elseif (preg_match('/[ая]я$/ui', $word)) { //научная
+            return preg_replace('/..$/ui', $ends[$case][4], $word);
+        } elseif (preg_match('/[гжкчхшщ]а$/ui', $word)) { //берлога
+            $result = preg_replace('/.$/ui', $ends[$case][5], $word);
+            if(preg_match('/[цкнгшщзфвпрлджчсмтб]к$/ui', $result)) {
+                return preg_replace('/(.)$/ui', 'е$1', $result);
+            }
+            return $result;
+        } elseif (preg_match('/[цнзвпрлдсмтб]а$/ui', $word)) { //дамба
+            return preg_replace('/.$/ui', $ends[$case][9], $word);
+        } elseif (preg_match('/ия$/ui', $word)) { //история
+            return preg_replace('/.$/ui', $ends[$case][11], $word);
+        } elseif (preg_match('/ние$/ui', $word)) { //растение
+            return preg_replace('/.$/ui', $ends[$case][6], $word);
+        } elseif (preg_match('/ок$/ui', $word) && mb_strlen($word, 'UTF-8') > 4) { //участок
+            return preg_replace('/..$/ui', $ends[$case][7], $word);
+        } elseif (preg_match('/[ое][бвгдлнх]$/ui', $word)) { //педагог но не бармен
+            return $word . $ends[$case][8];
+        } elseif (preg_match('/[цкнгшщзхфвпрлджчсмтб]о$/ui', $word)) { //общество
+            return preg_replace('/.$/ui', $ends[$case][8], $word);
+        } else {
+            return $word;
+        }
+    }
+
 }
