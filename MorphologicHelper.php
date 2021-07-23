@@ -357,7 +357,7 @@ final class MorphologicHelper
             return preg_replace('/.$/ui', $ends[$case][9], $word);
         } elseif (preg_match('/ия$/ui', $word)) {
             return preg_replace('/.$/ui', $ends[$case][11], $word);
-        } elseif (preg_match('/[т]ь$/ui', $word)) {
+        } elseif (preg_match('/ть$/ui', $word)) {
             return preg_replace('/.$/ui', $ends[$case][12], $word);
         } elseif (preg_match('/ние$/ui', $word)) {
             return preg_replace('/.$/ui', $ends[$case][6], $word);
