@@ -361,7 +361,7 @@ final class MorphologicHelper
             return preg_replace('/.$/ui', $ends[$case][6], $word);
         } elseif (preg_match('/ок$/ui', $word) && mb_strlen($word, 'UTF-8') > 4) {
             return preg_replace('/..$/ui', $ends[$case][7], $word);
-        } elseif (preg_match('/[ое][бвгдлнх]$/ui', $word)) { //но не бармен
+        } elseif (preg_match('/(^устав)|([ое][бвгдлнх])$/ui', $word)) { //но не бармен
             return $word . $ends[$case][8];
         } elseif (preg_match('/[цкнгшщзхфвпрлджчсмтб]о$/ui', $word)) { //общество
             return preg_replace('/.$/ui', $ends[$case][8], $word);
