@@ -318,11 +318,11 @@ final class MorphologicHelper
     private static function wordEnds() : array
     {
         return [
-            self::GENETIVE =>      ['ого', 'его', 'а',  'я',  'ой', 'и',  'я',  'ка',  'а',  'ы',  'ей', 'и',  'ти'],
-            self::DATIVE =>        ['ому', 'ему', 'у',  'ю',  'ой', 'е',  'ю',  'ку',  'у',  'е',  'ей', 'и',  'ти'],
-            self::ACCUSATIVE =>    ['ого', 'его', 'а',  'я',  'ую', 'у',  'е',  'ок',  '',   'у',  'ую', 'ю',  'ть'],
-            self::INSTRUMENTAL =>  ['им',  'им',  'ом', 'ем', 'ой', 'ой', 'ем', 'ком', 'ом', 'ой', 'ей', 'ей', 'тью'],
-            self::PREPOSITIONAL => ['ом',  'ом',  'е',  'е',  'ой', 'е',  'и',  'ке',  'е',  'е',  'ей', 'и',  'ти'],
+            self::GENETIVE =>      ['ого', 'его', 'а',  'я',  'ой', 'и',  'я',  'ка',  'а',  'ы',  'ей', 'и',  '$1и'],
+            self::DATIVE =>        ['ому', 'ему', 'у',  'ю',  'ой', 'е',  'ю',  'ку',  'у',  'е',  'ей', 'и',  '$1и'],
+            self::ACCUSATIVE =>    ['ого', 'его', 'а',  'я',  'ую', 'у',  'е',  'ок',  '',   'у',  'ую', 'ю',  '$1ь'],
+            self::INSTRUMENTAL =>  ['им',  'им',  'ом', 'ем', 'ой', 'ой', 'ем', 'ком', 'ом', 'ой', 'ей', 'ей', '$1ью'],
+            self::PREPOSITIONAL => ['ом',  'ом',  'е',  'е',  'ой', 'е',  'и',  'ке',  'е',  'е',  'ей', 'и',  '$1и'],
         ];
     }
 
@@ -357,7 +357,7 @@ final class MorphologicHelper
             return preg_replace('/.$/ui', $ends[$case][9], $word);
         } elseif (preg_match('/ия$/ui', $word)) {
             return preg_replace('/.$/ui', $ends[$case][11], $word);
-        } elseif (preg_match('/ть$/ui', $word)) {
+        } elseif (preg_match('/[т]ь$/ui', $word)) {
             return preg_replace('/..$/ui', $ends[$case][12], $word);
         } elseif (preg_match('/ние$/ui', $word)) {
             return preg_replace('/.$/ui', $ends[$case][6], $word);
