@@ -34,7 +34,7 @@ final class MorphologicHelper
     const NOMINATIVE = 'nominative';
 
     /**
-     * родительский падеж
+     * родительный падеж
      */
     const GENETIVE = 'genetive';
 
@@ -318,11 +318,11 @@ final class MorphologicHelper
     private static function wordEnds() : array
     {
         return [
-            self::GENETIVE =>      ['ого', 'его', 'а',  'я',  'ой', 'и',  'я',  'ка',  'а',  'ы',  'ей', 'и',  'и'],
-            self::DATIVE =>        ['ому', 'ему', 'у',  'ю',  'ой', 'е',  'ю',  'ку',  'у',  'е',  'ей', 'и',  'и'],
-            self::ACCUSATIVE =>    ['ого', 'его', 'а',  'я',  'ую', 'у',  'е',  'ок',  '',   'у',  'ую', 'ю',  'ь'],
-            self::INSTRUMENTAL =>  ['им',  'им',  'ом', 'ем', 'ой', 'ой', 'ем', 'ком', 'ом', 'ой', 'ей', 'ей', 'ью'],
-            self::PREPOSITIONAL => ['ом',  'ом',  'е',  'е',  'ой', 'е',  'и',  'ке',  'е',  'е',  'ей', 'и',  'и'],
+            self::GENETIVE => ['ого', 'его', 'а', 'я', 'ой', 'и', 'я', 'ка', 'а', 'ы', 'ей', 'и', 'и', 'я'],
+            self::DATIVE => ['ому', 'ему', 'у', 'ю', 'ой', 'е', 'ю', 'ку', 'у', 'е', 'ей', 'и', 'и', 'е'],
+            self::ACCUSATIVE => ['ого', 'его', 'а', 'я', 'ую', 'у', 'е', 'ок', '', 'у', 'ую', 'ю', 'ь', 'я'],
+            self::INSTRUMENTAL => ['им', 'им', 'ом', 'ем', 'ой', 'ой', 'ем', 'ком', 'ом', 'ой', 'ей', 'ей', 'ью', 'ем'],
+            self::PREPOSITIONAL => ['ом', 'ом', 'е', 'е', 'ой', 'е', 'и', 'ке', 'е', 'е', 'ей', 'и', 'и', 'е'],
         ];
     }
 
@@ -334,8 +334,14 @@ final class MorphologicHelper
      */
     public static function wordCase(string $word, string $case): string
     {
+        $wordLow = mb_strtolower($word, 'UTF-8');
         $ends = self::wordEnds();
-        if (in_array(mb_strtolower($word, 'UTF-8'), ['по', 'о', 'об', 'над', 'пальто', 'метро', 'кофе', 'бюро', 'на', 'постоянно', 'регулярно', 'вечно'])) {
+        
+        $manWords = ['голубь', 'восемь', 'гусь', 'карась', 'лось' , 'лосось' , 'вождь' , 'гвоздь' , 'господь', 'груздь', 'дождь', 'желудь', 'лебедь', 'медведь', 'витязь', 'князь', 'ферзь'];
+        
+        if(in_array($wordLow, ['устав', 'анклав', 'нрав', 'рукав', 'сплав', 'удав', 'сустав', 'состав'])) {
+            return $word . $ends[$case][8];
+        } elseif (in_array($wordLow, ['по', 'о', 'об', 'над', 'пальто', 'метро', 'кофе', 'бюро', 'на', 'постоянно', 'регулярно', 'вечно'])) {
             return $word;
         } elseif (preg_match('/ский|ое$/ui', $word)) {
             return preg_replace('/..$/ui', $ends[$case][0], $word);
@@ -357,11 +363,15 @@ final class MorphologicHelper
             return preg_replace('/.$/ui', $ends[$case][9], $word);
         } elseif (preg_match('/ия$/ui', $word)) {
             return preg_replace('/.$/ui', $ends[$case][11], $word);
+        } elseif(in_array($wordLow, $manWords)) { //слова мужского рода на гласную и мягкий знак
+            return preg_replace('/.$/ui', $ends[$case][13], $word);
+        } elseif (preg_match('/[твпжчщшфбмсдз]ь$/ui', $word)) {   //женский род, непонятно что делать со словам на [лрн]ь - там роды спутаны
+            return preg_replace('/.$/ui', $ends[$case][12], $word);
         } elseif (preg_match('/ние$/ui', $word)) {
             return preg_replace('/.$/ui', $ends[$case][6], $word);
         } elseif (preg_match('/ок$/ui', $word) && mb_strlen($word, 'UTF-8') > 4) {
             return preg_replace('/..$/ui', $ends[$case][7], $word);
-        } elseif (preg_match('/(^устав)|([ое][бвгдлнх])$/ui', $word)) { //но не бармен
+        } elseif (preg_match('/[ое][бвгдлнх]$/ui', $word)) { //но не бармен
             return $word . $ends[$case][8];
         } elseif (preg_match('/[цкнгшщзхфвпрлджчсмтб]о$/ui', $word)) { //общество
             return preg_replace('/.$/ui', $ends[$case][8], $word);
