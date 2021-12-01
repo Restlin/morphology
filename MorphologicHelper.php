@@ -341,7 +341,7 @@ final class MorphologicHelper
         
         if(in_array($wordLow, ['устав', 'анклав', 'нрав', 'рукав', 'сплав', 'удав', 'сустав', 'состав'])) {
             return $word . $ends[$case][8];
-        } elseif (in_array($wordLow, ['по', 'о', 'об', 'над', 'пальто', 'метро', 'кофе', 'бюро', 'на', 'постоянно', 'регулярно', 'вечно'])) {
+        } elseif (in_array($wordLow, ['по', 'о', 'об', 'над', 'пальто', 'метро', 'кофе', 'бюро', 'на', 'постоянно', 'регулярно', 'вечно', 'мисс'])) {
             return $word;
         } elseif (preg_match('/ский|ое$/ui', $word)) {
             return preg_replace('/..$/ui', $ends[$case][0], $word);
@@ -371,7 +371,7 @@ final class MorphologicHelper
             return preg_replace('/.$/ui', $ends[$case][6], $word);
         } elseif (preg_match('/ок$/ui', $word) && mb_strlen($word, 'UTF-8') > 4) {
             return preg_replace('/..$/ui', $ends[$case][7], $word);
-        } elseif (preg_match('/[ое][бвгдлнх]$/ui', $word)) { //но не бармен
+        } elseif (preg_match('//([ое][бвгдлнх]|[бвгджзйклмнпрстфхцчшщ][бвгджзйклмнпрстфхцчшщ])$/ui', $word)) { //но не бармен
             return $word . $ends[$case][8];
         } elseif (preg_match('/[цкнгшщзхфвпрлджчсмтб]о$/ui', $word)) { //общество
             return preg_replace('/.$/ui', $ends[$case][8], $word);
